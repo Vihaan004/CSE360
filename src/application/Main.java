@@ -25,6 +25,7 @@ public class Main extends Application {
 		stage.setTitle("Heart Health Imaging and Recording System");
 		stage.setScene(scene);
 		stage.show();
+		
 	}
 	
 	public static void main(String[] args) {

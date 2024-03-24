@@ -39,7 +39,7 @@ public class PatientIntake {
 		GridPane form = new GridPane();
 		form.setAlignment(Pos.CENTER);
 		form.setVgap(20);
-		form.setHgap(10);
+		form.setHgap(50);
 		
 		Text header = new Text("Patient Intake Form");
 		header.setFont(Font.font("null", FontWeight.BOLD, 16));
@@ -70,7 +70,7 @@ public class PatientIntake {
 		form.add(healthHistory, 1,6);
 		
 		Button save = new Button("Save");
-		save.setOnAction(event -> saveForm());
+		save.setOnAction(event -> saveIntakeForm());
 		form.add(save, 1,7);
 		
 		Scene intakeFormScene = new Scene(form, width, height);
@@ -80,32 +80,38 @@ public class PatientIntake {
 	}
 	
 	
-	public void saveForm() {
+	public void saveIntakeForm() {
 		
-		String patientID = generatePatientID();
-		String dirname = "Patient Records";
-		File dir = new File(dirname);
-		// Create a directory for Patient Records if it doesn't exist
-		if(!dir.exists()) {
-			dir.mkdirs();
+		if(firstName.getText().isEmpty() || lastName.getText().isEmpty()) {
+			System.out.println("First name and last name are required");
+			
+		} else {
+			String patientID = generatePatientID();
+			String dirname = "Patient Records";
+			File dir = new File(dirname);
+			// Create a directory for Patient Records if it doesn't exist
+			if(!dir.exists()) {
+				dir.mkdirs();
+			}
+			
+			String filename = dirname + File.separator + patientID + "_PatientInfo.txt";
+			
+			try(BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
+				file.write(patientID + "\n");
+				file.write(firstName.getText() + "\n");
+				file.write(lastName.getText() + "\n");
+				file.write(email.getText() + "\n");
+				file.write(phone.getText() + "\n");
+				file.write(insuranceID.getText() + "\n");
+				file.write(healthHistory.getText() + "\n");
+				file.flush();
+				file.close();
+				System.out.println("Patient file created");
+			} catch (IOException E) {
+				System.out.println("Failed to create Patient File");
+			}
 		}
 		
-		String filename = dirname + File.separator + patientID + "_PatientInfo.txt";
-		
-		try(BufferedWriter file = new BufferedWriter(new FileWriter(filename));) {
-			file.write(patientID + "\n");
-			file.write(firstName.getText() + "\n");
-			file.write(lastName.getText() + "\n");
-			file.write(email.getText() + "\n");
-			file.write(phone.getText() + "\n");
-			file.write(insuranceID.getText() + "\n");
-			file.write(healthHistory.getText() + "\n");
-			file.flush();
-			file.close();
-			System.out.println("Patient file created\n");
-		} catch (IOException E) {
-			System.out.println("Failed to create Patient File");
-		}
 		
 	}
 	

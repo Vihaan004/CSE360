@@ -60,9 +60,11 @@ public class Menu {
 		case 1:
 			PatientIntake intakeForm = new PatientIntake(stage, width, height);
 			intakeForm.showForm();
-//		case 2:
-//			PatientIntake  = new PatientIntake(stage, width, height);
-//			intakeForm.showForm();
+			break;
+		case 2:
+			CTScan CTForm = new CTScan(stage, width, height);
+			CTForm.showCTScanForm();
+			break;
 //		case 3:
 //			PatientIntake intakeForm = new PatientIntake(stage, width, height);
 //			intakeForm.showForm();

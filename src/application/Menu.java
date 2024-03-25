@@ -15,6 +15,7 @@ public class Menu {
 	private Stage stage;
 	int width;
 	int height;
+	Scene menuScene;
 	
 	Menu(Stage stage, int w, int h) {
 		this.stage = stage;
@@ -48,7 +49,7 @@ public class Menu {
 		
 		menu.getChildren().addAll(header, intakeButton, techButton, patientViewButton);
 		
-		Scene menuScene = new Scene(menu, width, height);
+		menuScene = new Scene(menu, width, height);
 		stage.setScene(menuScene);
 		stage.setTitle("Heart Health Imaging and Recording System");
 		stage.show();
@@ -58,17 +59,20 @@ public class Menu {
 	public void navigate(int portalNum) {
 		switch(portalNum) {
 		case 1:
-			PatientIntake intakeForm = new PatientIntake(stage, width, height);
+			PatientIntake intakeForm = new PatientIntake(stage, width, height, menuScene);
 			intakeForm.showForm();
 			break;
 		case 2:
-			CTScan CTForm = new CTScan(stage, width, height);
+			CTScan CTForm = new CTScan(stage, width, height, menuScene);
 			CTForm.showCTScanForm();
 			break;
-//		case 3:
-//			PatientIntake intakeForm = new PatientIntake(stage, width, height);
-//			intakeForm.showForm();
-			
+		case 3:
+			Patient patientView = new Patient(stage, width, height, menuScene);
+			patientView.showPatientPortal();
+			break;
+		default:
+			System.out.println("System failure");
+			System.exit(0);
 		}
 	}
 

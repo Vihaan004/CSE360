@@ -29,12 +29,13 @@ public class CTScan {
 	private TextField LCX;
 	private TextField RCA;
 	private TextField PDA;
+	Scene prevScene;
 	
-	
-	CTScan(Stage stage, int w, int h) {
+	CTScan(Stage stage, int w, int h, Scene prevScene) {
 		this.stage = stage;
 		width = w;
 		height = h;
+		this.prevScene = prevScene;
 	}
 	
 	public void showCTScanForm() {
@@ -43,47 +44,50 @@ public class CTScan {
 		form.setVgap(20);
 		form.setHgap(100);
 		
-//		Text header = new Text("Patient Intake Form");
-//		header.setFont(Font.font("null", FontWeight.BOLD, 16));
-//		form.add(header, 1,0);
+		Text header = new Text("CT Scan Form");
+		header.setFont(Font.font("null", FontWeight.BOLD, 16));
+		form.add(header, 1,0);
 		
-		form.add(new Label("Patient ID:"), 0,0);
+		form.add(new Label("Patient ID:"), 0,1);
 		patientID = new TextField();
-		form.add(patientID, 1,0);
+		form.add(patientID, 1,1);
 		
-		form.add(new Label("The total Agaston CAC Score: "), 0,1);
+		form.add(new Label("The total Agaston CAC Score: "), 0,2);
 		CAC = new TextField();
-		form.add(CAC, 1,1);
+		form.add(CAC, 1,2);
 		
-		form.add(new Text("Vessel level Agaston CAC Score "), 1,2);
+		form.add(new Text("Vessel level Agaston CAC Score "), 1,3);
 		
-		form.add(new Label("LM:"), 0,3);
+		form.add(new Label("LM:"), 0,4);
 		LM = new TextField();
-		form.add(LM, 1,3);
+		form.add(LM, 1,4);
 		
-		form.add(new Label("LAD:"), 0,4);
+		form.add(new Label("LAD:"), 0,5);
 		LAD = new TextField();
-		form.add(LAD, 1,4);
+		form.add(LAD, 1,5);
 		
-		form.add(new Label("LCX:"), 0,5);
+		form.add(new Label("LCX:"), 0,6);
 		LCX = new TextField();
-		form.add(LCX, 1,5);
+		form.add(LCX, 1,6);
 		
-		form.add(new Label("RCA:"), 0,6);
+		form.add(new Label("RCA:"), 0,7);
 		RCA = new TextField();
-		form.add(RCA, 1,6);
+		form.add(RCA, 1,7);
 		
-		form.add(new Label("PDA:"), 0,7);
+		form.add(new Label("PDA:"), 0,8);
 		PDA = new TextField();
-		form.add(PDA, 1,7);
+		form.add(PDA, 1,8);
+		
+		Button back = new Button("Menu");
+		back.setOnAction(event -> backToMenu());
+		form.add(back, 0,9);
 		
 		Button save = new Button("Save");
 		save.setOnAction(event -> saveCTForm());
-		form.add(save, 1,8);
+		form.add(save, 1,9);
 		
 		Scene CTFormScene = new Scene(form, width, height);
 		stage.setScene(CTFormScene);
-		stage.setTitle("CT Scan");
 		stage.show();
 	}
 	
@@ -93,14 +97,13 @@ public class CTScan {
 	
 	public void saveCTForm() {
 		
-		
 		if(isEmpty(CAC)||isEmpty(LM)||isEmpty(LAD)||isEmpty(LCX)||isEmpty(RCA)||isEmpty(PDA)) {
 			System.out.println("One or more fields are missing");
 		}
 		else if(!new File("Patient Records" + File.separator + patientID.getText() + "_PatientInfo.txt").exists()) {
 			System.out.println("ID does not exist");
 		} else {
-			System.out.println("yay");
+			//System.out.println("yay");
 			String filename = "Patient Records" + File.separator + patientID.getText() + "CTResults.txt";
 			try(BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
 				file.write(CAC.getText() + "\n");
@@ -117,5 +120,11 @@ public class CTScan {
 				System.out.println("Failed to create Results File");
 			}
 		}
+	}
+	
+	private void backToMenu() {
+		stage.setScene(prevScene);
+		stage.show();
+		
 	}
 }

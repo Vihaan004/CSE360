@@ -28,11 +28,13 @@ public class PatientIntake {
 	private TextField phone;
 	private TextField insuranceID;
 	private TextArea healthHistory;
+	Scene prevScene;
 	
-	PatientIntake(Stage stage, int w, int h) {
+	PatientIntake(Stage stage, int w, int h, Scene prevScene) {
 		this.stage = stage;
 		width = w;
 		height = h;
+		this.prevScene = prevScene;
 	}
 	
 	public void showForm() {
@@ -69,13 +71,16 @@ public class PatientIntake {
 		healthHistory = new TextArea();
 		form.add(healthHistory, 1,6);
 		
+		Button back = new Button("Menu");
+		back.setOnAction(event -> backToMenu());
+		form.add(back, 0,7);
+		
 		Button save = new Button("Save");
 		save.setOnAction(event -> saveIntakeForm());
 		form.add(save, 1,7);
 		
 		Scene intakeFormScene = new Scene(form, width, height);
 		stage.setScene(intakeFormScene);
-		stage.setTitle("Patient Intake Form");
 		stage.show();
 	}
 	
@@ -84,7 +89,6 @@ public class PatientIntake {
 		
 		if(firstName.getText().isEmpty() || lastName.getText().isEmpty()) {
 			System.out.println("First name and last name are required");
-			
 		} else {
 			String patientID = generatePatientID();
 			String dirname = "Patient Records";
@@ -93,7 +97,6 @@ public class PatientIntake {
 			if(!dir.exists()) {
 				dir.mkdirs();
 			}
-			
 			String filename = dirname + File.separator + patientID + "_PatientInfo.txt";
 			
 			try(BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
@@ -110,9 +113,7 @@ public class PatientIntake {
 			} catch (IOException E) {
 				System.out.println("Failed to create Patient File");
 			}
-		}
-		
-		
+		}	
 	}
 	
 	private String generatePatientID() {
@@ -121,5 +122,11 @@ public class PatientIntake {
 			id = Integer.toString((int)(Math.random()*89999+10000));
 		}
 		return id;
+	}
+	
+	private void backToMenu() {
+		stage.setScene(prevScene);
+		stage.show();
+		
 	}
 }

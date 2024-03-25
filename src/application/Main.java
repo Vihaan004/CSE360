@@ -8,13 +8,10 @@ public class Main extends Application {
 	int width = 1000;
 	int height = 700;
 	
-	
-	
 	public void start(Stage primaryStage) {
 		Menu menu = new Menu(primaryStage, width, height);
 		menu.showMenu();
 	}
-	
 	
 	public static void main(String[] args) {
 		launch(args);

@@ -96,6 +96,7 @@ public class CTScan {
 		return field.getText().isEmpty() ? true : false;
 	}
 	
+	// save CT form data to a txt file
 	private void saveCTForm(Text alert, Button save) {
 		// verify if all fields are filled
 		if(isEmpty(CAC)||isEmpty(LM)||isEmpty(LAD)||isEmpty(LCX)||isEmpty(RCA)||isEmpty(PDA)) {

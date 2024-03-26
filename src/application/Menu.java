@@ -15,7 +15,7 @@ public class Menu {
 	private Stage stage;
 	int width;
 	int height;
-	Scene menuScene;
+	private Scene menuScene;
 	
 	Menu(Stage stage, int w, int h) {
 		this.stage = stage;

@@ -10,24 +10,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Patient {
+	
 	private Stage stage;
-	int width;
-	int height;
-	private TextField patientID;
+	int width, height;
+	private TextField patientID, CAC, LM, LAD, LCX, RCA, PDA;
 	private String patientName;
-	private TextField CAC;
-	private TextField LM;
-	private TextField LAD;
-	private TextField LCX;
-	private TextField RCA;
-	private TextField PDA;	
-	Scene prevScene;
+	private Scene prevScene, patientLoginScene;
 	
 	Patient(Stage stage, int w, int h, Scene prevScene) {
 		this.stage = stage;
@@ -47,23 +42,28 @@ public class Patient {
 		patientID = new TextField();
 		form.add(patientID, 1,0);
 		
+		// space for an alert message when requirements are not met
+		Text alert = new Text("");
+		form.add(alert, 1,3);
+				
 		Button back = new Button("Menu");
-		back.setOnAction(event -> backToMenu());
+		back.setOnAction(event -> setPrevScene());
 		form.add(back, 0,2);
 		
 		Button enter = new Button("Enter");
-		enter.setOnAction(event -> showPatientInfo());
+		enter.setOnAction(event -> showPatientInfo(alert));
 		form.add(enter, 1,2);
 		
-		Scene patientLoginScene = new Scene(form, width, height);
+		patientLoginScene = new Scene(form, width, height);
 		stage.setScene(patientLoginScene);
 		stage.show();
 	}
 	
-	public void showPatientInfo() {
+	public void showPatientInfo(Text alert) {
 		
 		if(!new File("Patient Records" + File.separator + patientID.getText() + "CTResults.txt").exists()) {
-			System.out.println("Patient CT file does not exist");
+			alert.setFill(Color.RED);
+			alert.setText("CT file for "+ patientID.getText() + " does not exist");
 		} else {
 			getPatientInfo();
 			GridPane form = new GridPane();
@@ -96,7 +96,7 @@ public class Patient {
 			form.add(PDA, 1,7);
 			
 			Button back = new Button("Menu");
-			back.setOnAction(event -> backToMenu());
+			back.setOnAction(event -> setPrevScene());
 			form.add(back, 0,8);
 			
 			Scene CTFormScene = new Scene(form, width, height);
@@ -147,7 +147,7 @@ public class Patient {
 		PDA.setEditable(false);
 	}
 	
-	private void backToMenu() {
+	private void setPrevScene() {
 		stage.setScene(prevScene);
 		stage.show();
 	}

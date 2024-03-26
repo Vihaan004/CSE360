@@ -9,6 +9,7 @@ public class Main extends Application {
 	int height = 700;
 	
 	public void start(Stage primaryStage) {
+		// Open the main menu on startup
 		Menu menu = new Menu(primaryStage, width, height);
 		menu.showMenu();
 	}

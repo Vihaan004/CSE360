@@ -9,9 +9,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -20,16 +20,9 @@ import javafx.stage.Stage;
 public class CTScan {
 	
 	private Stage stage;
-	int width;
-	int height;
-	private TextField patientID;
-	private TextField CAC;
-	private TextField LM;
-	private TextField LAD;
-	private TextField LCX;
-	private TextField RCA;
-	private TextField PDA;
-	Scene prevScene;
+	int width, height;
+	private TextField patientID, CAC, LM, LAD, LCX, RCA, PDA;
+	private Scene prevScene, CTScanScene;
 	
 	CTScan(Stage stage, int w, int h, Scene prevScene) {
 		this.stage = stage;
@@ -38,16 +31,19 @@ public class CTScan {
 		this.prevScene = prevScene;
 	}
 	
+	// display the CT Scan report form 
 	public void showCTScanForm() {
 		GridPane form = new GridPane();
 		form.setAlignment(Pos.CENTER);
 		form.setVgap(20);
 		form.setHgap(100);
 		
+		// form title : 
 		Text header = new Text("CT Scan Form");
 		header.setFont(Font.font("null", FontWeight.BOLD, 16));
 		form.add(header, 1,0);
 		
+		// form fields:
 		form.add(new Label("Patient ID:"), 0,1);
 		patientID = new TextField();
 		form.add(patientID, 1,1);
@@ -78,33 +74,41 @@ public class CTScan {
 		PDA = new TextField();
 		form.add(PDA, 1,8);
 		
+		// space for an alert message when requirements are not met
+		Text alert = new Text("");
+		form.add(alert, 1,10);
+		
 		Button back = new Button("Menu");
-		back.setOnAction(event -> backToMenu());
+		back.setOnAction(event -> setPrevScene());
 		form.add(back, 0,9);
 		
 		Button save = new Button("Save");
-		save.setOnAction(event -> saveCTForm());
+		save.setOnAction(event -> saveCTForm(alert, save));
 		form.add(save, 1,9);
 		
-		Scene CTFormScene = new Scene(form, width, height);
-		stage.setScene(CTFormScene);
+		CTScanScene = new Scene(form, width, height);
+		stage.setScene(CTScanScene);
 		stage.show();
 	}
 	
+	// check if a TextField object is empty of text
 	private boolean isEmpty(TextField field) {
 		return field.getText().isEmpty() ? true : false;
 	}
 	
-	public void saveCTForm() {
-		
+	private void saveCTForm(Text alert, Button save) {
+		// verify if all fields are filled
 		if(isEmpty(CAC)||isEmpty(LM)||isEmpty(LAD)||isEmpty(LCX)||isEmpty(RCA)||isEmpty(PDA)) {
-			System.out.println("One or more fields are missing");
+			alert.setFill(Color.RED);
+			alert.setText("One or more fields are missing");
 		}
+		// search for patient file by ID
 		else if(!new File("Patient Records" + File.separator + patientID.getText() + "_PatientInfo.txt").exists()) {
-			System.out.println("ID does not exist");
+			alert.setFill(Color.RED);
+			alert.setText("Invalid ID");
 		} else {
-			//System.out.println("yay");
 			String filename = "Patient Records" + File.separator + patientID.getText() + "CTResults.txt";
+			// open file and write CT Scan data
 			try(BufferedWriter file = new BufferedWriter(new FileWriter(filename))) {
 				file.write(CAC.getText() + "\n");
 				file.write(LM.getText() + "\n");
@@ -114,15 +118,20 @@ public class CTScan {
 				file.write(PDA.getText() + "\n");
 				file.flush();
 				file.close();
-				System.out.println("Results file created");
-			
+				alert.setText("Results file saved for : " + patientID.getText());
+				alert.setFill(Color.GREEN);
+				// disable save button
+				save.setDisable(true);
 			} catch (IOException E) {
-				System.out.println("Failed to create Results File");
+				// alert on encountering error in File IO
+				alert.setFill(Color.RED);
+				alert.setText("SYSTEM FAILURE - Failed to save results file");
 			}
 		}
 	}
-	
-	private void backToMenu() {
+
+	// set previous scene (previous page)
+	private void setPrevScene() {
 		stage.setScene(prevScene);
 		stage.show();
 		

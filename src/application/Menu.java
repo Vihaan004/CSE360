@@ -24,6 +24,7 @@ public class Menu {
 		height = h;
 	}
 	
+	// display startup menu
 	public void showMenu() {
 		VBox menu = new VBox(20);
 		menu.setAlignment(Pos.CENTER);
@@ -57,6 +58,7 @@ public class Menu {
 		
 	}
 	
+	// navigate to specific page based on pressed button
 	public void navigate(int portalNum) {
 		switch(portalNum) {
 		case 1:

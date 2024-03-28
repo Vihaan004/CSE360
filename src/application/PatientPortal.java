@@ -1,3 +1,4 @@
+// Vihaan Patel - 1225904942
 package application;
 
 import java.io.File;
@@ -16,15 +17,15 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Patient {
+public class PatientPortal {
 	
 	private Stage stage;
 	int width, height;
 	private TextField patientID, CAC, LM, LAD, LCX, RCA, PDA;
 	private String patientName;
-	private Scene prevScene, patientLoginScene;
+	private Scene prevScene, patientLoginScene, patientInfoScene;
 	
-	Patient(Stage stage, int w, int h, Scene prevScene) {
+	PatientPortal(Stage stage, int w, int h, Scene prevScene) {
 		this.stage = stage;
 		width = w;
 		height = h;
@@ -54,13 +55,14 @@ public class Patient {
 		enter.setOnAction(event -> showPatientInfo(alert));
 		form.add(enter, 1,2);
 		
+		// setting patient login scene
 		patientLoginScene = new Scene(form, width, height);
 		stage.setScene(patientLoginScene);
 		stage.show();
 	}
 	
 	public void showPatientInfo(Text alert) {
-		
+		// search for the Results file by ID
 		if(!new File("Patient Records" + File.separator + patientID.getText() + "CTResults.txt").exists()) {
 			alert.setFill(Color.RED);
 			alert.setText("CT file for "+ patientID.getText() + " does not exist");
@@ -71,10 +73,12 @@ public class Patient {
 			form.setVgap(20);
 			form.setHgap(100);
 			
+			// title :
 			Text header = new Text("Hello " + patientName);
 			header.setFont(Font.font("null", FontWeight.BOLD, 16));
 			form.add(header, 1,0);
-		
+			
+			// fields :
 			form.add(new Label("The total Agaston CAC Score: "), 0,1);
 			form.add(CAC, 1,1);
 			
@@ -99,16 +103,21 @@ public class Patient {
 			back.setOnAction(event -> setPrevScene());
 			form.add(back, 0,8);
 			
-			Scene CTFormScene = new Scene(form, width, height);
-			stage.setScene(CTFormScene);
+			// setting patient information scene
+			patientInfoScene = new Scene(form, width, height);
+			stage.setScene(patientInfoScene);
 			stage.show();	
 		}
 	}
 	
+	
+	// retrieve patient data from Patient Records 
 	public void getPatientInfo() {
+		// search for info and results file by ID
 		File infoFile = new File("Patient Records" + File.separator + patientID.getText() + "_PatientInfo.txt");
 		File resultsFile = new File("Patient Records" + File.separator + patientID.getText() + "CTResults.txt");
 		
+		// open info file and read data (get patient name)
 		try(Scanner info = new Scanner(infoFile);) {
 			if(info.hasNextLine()) {
 	            info.nextLine();
@@ -124,7 +133,7 @@ public class Patient {
 			System.out.println("SYSTEM FAILURE");
 			System.exit(0);
 		}
-		
+		// open results file and read data
 		try(Scanner results = new Scanner(resultsFile)) {
 			if(results.hasNextLine()) {
 				CAC = new TextField(results.nextLine());
@@ -139,6 +148,7 @@ public class Patient {
 			System.out.println("SYSTEM FAILURE");
 			System.exit(0);
 		}
+		// disable text field editable property
 		CAC.setEditable(false);
 		LM.setEditable(false);
 		LAD.setEditable(false);
@@ -147,6 +157,7 @@ public class Patient {
 		PDA.setEditable(false);
 	}
 	
+	// set previous scene (previous page)
 	private void setPrevScene() {
 		stage.setScene(prevScene);
 		stage.show();

@@ -1,3 +1,4 @@
+// Vihaan Patel - 1225904942
 package application;
 
 import javafx.geometry.Pos;
@@ -67,7 +68,7 @@ public class Menu {
 			CTForm.showCTScanForm();
 			break;
 		case 3:
-			Patient patientView = new Patient(stage, width, height, menuScene);
+			PatientPortal patientView = new PatientPortal(stage, width, height, menuScene);
 			patientView.showPatientPortal();
 			break;
 		default:

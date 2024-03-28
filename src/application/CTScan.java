@@ -1,3 +1,4 @@
+// Vihaan Patel - 1225904942
 package application;
 
 import java.io.BufferedWriter;
@@ -86,6 +87,7 @@ public class CTScan {
 		save.setOnAction(event -> saveCTForm(alert, save));
 		form.add(save, 1,9);
 		
+		// set scene
 		CTScanScene = new Scene(form, width, height);
 		stage.setScene(CTScanScene);
 		stage.show();
@@ -135,6 +137,5 @@ public class CTScan {
 	private void setPrevScene() {
 		stage.setScene(prevScene);
 		stage.show();
-		
 	}
 }
